@@ -1,40 +1,8 @@
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 24px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 700;
-  line-height: 26.4px;
-  margin: 20px;
-  background-color: #ECECEA;
-}
-
-.h1 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 30px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 700;
-  line-height: 26.4px;
-  margin: 20px;
-  background-color: #ECECEA;
-}
-
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
 
 .square {
   background: transparent;
   border: 1px solid transparent;
   float: left;
-  font-size: 24px;
   font-weight: bold;
   line-height: 34px;
   height: 48px;
@@ -42,7 +10,10 @@ body {
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 48px;
+  width: 10vw;
+  height: 10vw;
+  background-repeat: no-repeat;
+  background-size:contain;
 }
 
 .square:focus {
@@ -63,8 +34,7 @@ body {
 }
 
 .fallen-soldier-block {
-  margin-top: 20px;
-  min-height: 50px;
+  width: 10vw;
 }
 
 .dark-square {
