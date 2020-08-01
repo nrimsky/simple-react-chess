@@ -59,19 +59,19 @@ export default class Game extends React.Component {
 
         let selected = this.state.sourceSelection;
 
-        if (this.canTakePiece(i, squares)) {
+        if (this.canMovePiece(i, squares)) {
+            squares[i] = squares[this.state.sourceSelection];
+            squares[this.state.sourceSelection] = null;
+            selected = -1;
+            piecesMoved = true;
+        }
+        else if (this.canTakePiece(i, squares)) {
             if (squares[i].player === 1) {
                 whiteFallenSoldiers.push(squares[i]);
             }
             else {
                 blackFallenSoldiers.push(squares[i]);
             }
-            squares[i] = squares[this.state.sourceSelection];
-            squares[this.state.sourceSelection] = null;
-            selected = -1;
-            piecesMoved = true;
-        }
-        else if (this.canMovePiece(i, squares)) {
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
             selected = -1;
@@ -124,8 +124,8 @@ export default class Game extends React.Component {
                         />
                     </div>
                     <div className="game-info">
-                        <div className="back-button">
-                            <button onClick={this.goBack}> Go Back </button>
+                        <div>
+                            <button onClick={this.goBack} className="back-button"> Go Back </button>
                         </div>
                         <div className="fallen-soldier-block">
                             {<FallenSoldierBlock

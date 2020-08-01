@@ -1,17 +1,12 @@
 
 .square {
   background: transparent;
-  border: 1px solid transparent;
+  border: transparent;
   float: left;
-  font-weight: bold;
-  line-height: 34px;
-  height: 48px;
-  margin-right: -1px;
-  margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 10vw;
-  height: 10vw;
+  width: min(10vw,11vh);
+  height: min(10vw,11vh);
   background-repeat: no-repeat;
   background-size:contain;
 }
@@ -21,7 +16,7 @@
 }
 
 .kbd-navigation .square:focus {
-  background: #ddd;
+  background: white;
 }
 
 .game {
@@ -30,11 +25,57 @@
 }
 
 .game-info {
-  margin-left: 20px;
+  margin-left: 2vw;
 }
 
 .fallen-soldier-block {
-  width: 10vw;
+  width: min(10vw,11vh);
+}
+
+.back-button {
+  position: relative;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 1vw 1vw;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 2vw;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  color: black; 
+  border: 2px solid #4CAF50;
+  outline: none;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  overflow: hidden;
+  border-radius: 1vw;
+}
+
+.back-button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.back-button:after {
+  content: "";
+  background: #90EE90;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px!important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.back-button:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
 }
 
 .dark-square {
@@ -45,6 +86,14 @@
   background-color: RGB(227, 193, 111);
 }
 
+.light-square.selected {
+  background-color: RGB(207, 173, 91);
+}
+
+.dark-square.selected {
+  background-color: RGB(174, 129, 64);
+}
+
 .selected {
-  border: 2px solid black;
+  border: 1px solid black;
 }
