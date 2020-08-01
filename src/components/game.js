@@ -8,11 +8,13 @@ export default class Game extends React.Component {
     constructor() {
         super();
         this.state = {
-            squares: initialiseChessBoard(),
-            whiteFallenSoldiers: [],
-            blackFallenSoldiers: [],
+            history: [{
+                squares: initialiseChessBoard(),
+                whiteFallenSoldiers: [],
+                blackFallenSoldiers: [],
+            }],
             sourceSelection: -1,
-        }
+        };
     }
 
     canTakePiece(i, squares) {
@@ -22,7 +24,7 @@ export default class Game extends React.Component {
             const source_has_a_piece = (squares[this.state.sourceSelection] !== null);
             const selected_has_a_piece = (squares[i] !== null);
             if (selected_has_a_piece && source_has_a_piece) {
-                return (squares[this.state.sourceSelection].player != squares[i].player);
+                return (squares[this.state.sourceSelection].player !== squares[i].player);
             } else {
                 return false;
             }
@@ -41,18 +43,23 @@ export default class Game extends React.Component {
 
     canSelectSquare(i, squares) {
         const nothing_selected_so_far = (this.state.sourceSelection === -1);
-        const selecting_same_square_again = (this.state.sourceSelection === i);
+        const not_selecting_same_square_again = (this.state.sourceSelection !== i);
         const selected_has_a_piece = (squares[i] !== null);
-        return (selected_has_a_piece && (nothing_selected_so_far || selecting_same_square_again));
+        return (selected_has_a_piece && (nothing_selected_so_far || not_selecting_same_square_again));
     }
- 
+
     handleClick(i) {
-        const squares = this.state.squares.slice();
-        const whiteFallenSoldiers = this.state.whiteFallenSoldiers.slice();
-        const blackFallenSoldiers = this.state.blackFallenSoldiers.slice();
+
+        let piecesMoved = false;
+        const history = this.state.history.slice();
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+        const whiteFallenSoldiers = current.whiteFallenSoldiers.slice();
+        const blackFallenSoldiers = current.blackFallenSoldiers.slice();
+
         let selected = this.state.sourceSelection;
 
-        if (this.canTakePiece(i,squares)) {
+        if (this.canTakePiece(i, squares)) {
             if (squares[i].player === 1) {
                 whiteFallenSoldiers.push(squares[i]);
             }
@@ -62,42 +69,68 @@ export default class Game extends React.Component {
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
             selected = -1;
+            piecesMoved = true;
         }
-        else if (this.canMovePiece(i,squares)) {
+        else if (this.canMovePiece(i, squares)) {
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
             selected = -1;
+            piecesMoved = true;
         }
-        else if (this.canSelectSquare(i,squares)) {
+        else if (this.canSelectSquare(i, squares)) {
             selected = i;
-        } 
+        }
         else {
             selected = -1;
-        }      
-        this.setState({
-            sourceSelection: selected,
-            squares: squares,
-            whiteFallenSoldiers: whiteFallenSoldiers,
-            blackFallenSoldiers: blackFallenSoldiers,
-        });
+        }
+        if (piecesMoved) {
+            this.setState({
+                sourceSelection: selected,
+                history: history.concat([{
+                    squares: squares,
+                    whiteFallenSoldiers: whiteFallenSoldiers,
+                    blackFallenSoldiers: blackFallenSoldiers,
+                }]),
+            });
+        } else {
+            this.setState({
+                sourceSelection: selected,
+            });
+        }
+    }
+
+    goBack = () => {
+        const length = this.state.history.length;
+        if (length > 1) {
+            this.setState({
+                sourceSelection: -1,
+                history: this.state.history.slice(0, length - 1)
+            });
+
+        }
     }
 
     render() {
+        const history = this.state.history;
+        const current = history[history.length - 1];
         return (
             <div>
                 <div className="game">
                     <div className="game-board">
                         <Board
-                            squares={this.state.squares}
+                            squares={current.squares}
                             onClick={(i) => this.handleClick(i)}
                             selected={this.state.sourceSelection}
                         />
                     </div>
                     <div className="game-info">
+                        <div className="back-button">
+                            <button onClick={this.goBack}> Go Back </button>
+                        </div>
                         <div className="fallen-soldier-block">
                             {<FallenSoldierBlock
-                                whiteFallenSoldiers={this.state.whiteFallenSoldiers}
-                                blackFallenSoldiers={this.state.blackFallenSoldiers}
+                                whiteFallenSoldiers={current.whiteFallenSoldiers}
+                                blackFallenSoldiers={current.blackFallenSoldiers}
                             />}
                         </div>
                     </div>
