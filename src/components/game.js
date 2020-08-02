@@ -3,6 +3,8 @@ import '../index.css';
 import Board from './board.js';
 import FallenSoldierBlock from './fallen-soldiers.js';
 import initialiseChessBoard from '../helpers/board-initialiser.js';
+import Queen from '../pieces/queen';
+import Pawn from '../pieces/pawn';
 
 export default class Game extends React.Component {
     constructor() {
@@ -110,6 +112,27 @@ export default class Game extends React.Component {
         }
     }
 
+    promotePawn = () => {
+        const selected = this.state.sourceSelection;
+        if (selected === -1) { return; }
+        const history = this.state.history.slice();
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+        if(squares[selected].constructor.name===Pawn.name){
+            squares[selected] = new Queen(squares[selected].player);
+            const whiteFallenSoldiers = current.whiteFallenSoldiers.slice();
+            const blackFallenSoldiers = current.blackFallenSoldiers.slice();
+            this.setState({
+                sourceSelection: -1,
+                history: history.concat([{
+                    squares: squares,
+                    whiteFallenSoldiers: whiteFallenSoldiers,
+                    blackFallenSoldiers: blackFallenSoldiers
+                }]),
+            });
+        }
+    }
+
     render() {
         const history = this.state.history;
         const current = history[history.length - 1];
@@ -125,7 +148,10 @@ export default class Game extends React.Component {
                     </div>
                     <div className="game-info">
                         <div>
-                            <button onClick={this.goBack} className="back-button"> Go Back </button>
+                            <button onClick={this.goBack} className="game-button back"> Go Back </button>
+                        </div>
+                        <div>
+                        <button onClick={this.promotePawn} className="game-button promote"> Promote Pawn </button>
                         </div>
                         <div className="fallen-soldier-block">
                             {<FallenSoldierBlock

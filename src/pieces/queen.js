@@ -1,8 +1,10 @@
 import Piece from './piece.js';
+import bq from './images/bq.svg';
+import wq from './images/wq.svg';
 
 class Queen extends Piece {
     constructor(player) {
-        super(player, (player === 1 ? "https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg" : "https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg"));
+        super(player, (player === 1 ? (wq) : (bq) ));
     }
 }
 
